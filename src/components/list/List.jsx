@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
 
-import {Card, CardBody, CardHeader} from "reactstrap";
+import { Card, CardBody, CardHeader } from "reactstrap";
 
 import ActivityTable from "./ActivityTable";
 import Empty from "./Empty";
@@ -11,26 +11,20 @@ import Empty from "./Empty";
  * @return {*}
  * @constructor
  */
-const List = ({activities}) => {
+const List = ({ activities }) => {
   return (
     <Card className="rounded shadow-sm overflow-hidden">
-      <CardHeader>
-        Activity List
-      </CardHeader>
+      <CardHeader>Activity List</CardHeader>
       <CardBody>
-        {!!(activities.length) && (
-          <ActivityTable  activities={activities}/>
-        )}
-        {!activities.length && (
-          <Empty/>
-        )}
+        {!!activities.length && <ActivityTable activities={activities} />}
+        {!activities.length && <Empty />}
       </CardBody>
     </Card>
   );
 };
 
 List.propTypes = {
-  activities: PropTypes.array.isRequired,
+  activities: PropTypes.array.isRequired
 };
 
 export default List;

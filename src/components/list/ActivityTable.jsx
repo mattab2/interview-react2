@@ -1,5 +1,5 @@
-import React from 'react';
-import {Table} from 'reactstrap';
+import React from "react";
+import { Table } from "reactstrap";
 import PropTypes from "prop-types";
 
 /**
@@ -8,17 +8,17 @@ import PropTypes from "prop-types";
  * @return {string}
  * @constructor
  */
-const ShowDate = ({timestamp}) => {
+const ShowDate = ({ timestamp }) => {
   if (!timestamp) {
-    return "---"
+    return "---";
   }
 
   const d = new Date(timestamp);
-  return d.toLocaleDateString('en-US') + ' ' + d.toLocaleTimeString('en-US');
+  return d.toLocaleDateString("en-US") + " " + d.toLocaleTimeString("en-US");
 };
 
 ShowDate.propTypes = {
-  timestamp: PropTypes.number,
+  timestamp: PropTypes.number
 };
 
 /**
@@ -28,9 +28,9 @@ ShowDate.propTypes = {
  * @return {string}
  * @constructor
  */
-const ShowDuration = ({start, stop}) => {
+const ShowDuration = ({ start, stop }) => {
   if (!start) {
-    return "---"
+    return "---";
   }
 
   let stopTimestamp = stop;
@@ -40,21 +40,15 @@ const ShowDuration = ({start, stop}) => {
 
   let diff = (stopTimestamp - start) / 1000;
   let minutes = Math.floor(diff / 60);
-  let seconds = diff - (minutes * 60);
+  let seconds = diff - minutes * 60;
 
   return (
     <React.Fragment>
-      {!!(minutes) && (
-        `${minutes} Minutes`
-      )}
-      {!!(seconds) && (
-        ` ${Math.round(seconds)} Seconds`
-      )}
-      {!(stop) && (
-        ` (In Progress)`
-    )}
+      {!!minutes && `${minutes} Minutes`}
+      {!!seconds && ` ${Math.round(seconds)} Seconds`}
+      {!stop && ` (In Progress)`}
     </React.Fragment>
-  )
+  );
 };
 
 ShowDuration.propTypes = {
@@ -68,61 +62,54 @@ ShowDuration.propTypes = {
  * @return {*}
  * @constructor
  */
-const ActivityTableRow = ({activity}) => {
+const ActivityTableRow = ({ activity }) => {
   return (
     <tr>
       <td>
-        <ShowDate timestamp={activity.start}/>
+        <ShowDate timestamp={activity.start} />
       </td>
       <td>
-        <ShowDate timestamp={activity.stop}/>
+        <ShowDate timestamp={activity.stop} />
       </td>
       <td>
-        <ShowDuration
-          start={activity.start}
-          stop={activity.stop}
-        />
+        <ShowDuration start={activity.start} stop={activity.stop} />
       </td>
       <td>{activity.name}</td>
     </tr>
-  )
+  );
 };
 
 ActivityTableRow.propTypes = {
-  activity: PropTypes.object.isRequired,
+  activity: PropTypes.object.isRequired
 };
-
 
 /**
  * @param activities
  * @return {*}
  * @constructor
  */
-const ActivityTable = ({activities}) => {
+const ActivityTable = ({ activities }) => {
   return (
     <Table>
       <thead>
-      <tr>
-        <th>Started At</th>
-        <th>Completed At</th>
-        <th>Duration</th>
-        <th>Name</th>
-      </tr>
+        <tr>
+          <th>Started At</th>
+          <th>Completed At</th>
+          <th>Duration</th>
+          <th>Name</th>
+        </tr>
       </thead>
       <tbody>
-      {activities.map((activity, index) => {
-        return <ActivityTableRow
-          key={index}
-          activity={activity}
-        />
-      })}
+        {activities.map((activity, index) => {
+          return <ActivityTableRow key={index} activity={activity} />;
+        })}
       </tbody>
     </Table>
   );
 };
 
 ActivityTable.propTypes = {
-  activities: PropTypes.array.isRequired,
+  activities: PropTypes.array.isRequired
 };
 
 export default ActivityTable;

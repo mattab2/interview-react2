@@ -1,10 +1,9 @@
-
 /**
  * List all activities
  * @constructor
  */
 export const ActivityListGet = () => {
-  let data = sessionStorage.getItem('items');
+  let data = sessionStorage.getItem("items");
   if (!data) {
     return [];
   }
@@ -17,6 +16,6 @@ export const ActivityListGet = () => {
  * List all activities
  * @constructor
  */
-export const ActivityListSet = (items) => {
-  sessionStorage.setItem('items', JSON.stringify(items));
+export const ActivityListSet = items => {
+  sessionStorage.setItem("items", JSON.stringify(items));
 };
