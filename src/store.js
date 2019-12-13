@@ -20,30 +20,3 @@ export const ActivityListGet = () => {
 export const ActivityListSet = (items) => {
   sessionStorage.setItem('items', JSON.stringify(items));
 };
-
-
-/**
- *
- * @constructor
- */
-export const ActivityGetActive = () => {
-
-};
-
-
-/**
- *
- * @constructor
- */
-export const ActivityStart = (activity) => {
-
-};
-
-
-/**
- * Stop Activity
- * @constructor
- */
-export const ActivityStop = (activity) => {
-
-};

@@ -29,11 +29,16 @@ ShowDate.propTypes = {
  * @constructor
  */
 const ShowDuration = ({start, stop}) => {
-  if (!stop || !start) {
+  if (!start) {
     return "---"
   }
 
-  let diff  = (stop - start) / 1000;
+  let stopTimestamp = stop;
+  if (!stopTimestamp) {
+    stopTimestamp = Date.now();
+  }
+
+  let diff = (stopTimestamp - start) / 1000;
   let minutes = Math.floor(diff / 60);
   let seconds = diff - (minutes * 60);
 
@@ -45,9 +50,11 @@ const ShowDuration = ({start, stop}) => {
       {!!(seconds) && (
         ` ${Math.round(seconds)} Seconds`
       )}
+      {!(stop) && (
+        ` (In Progress)`
+    )}
     </React.Fragment>
   )
-
 };
 
 ShowDuration.propTypes = {
@@ -64,14 +71,19 @@ ShowDuration.propTypes = {
 const ActivityTableRow = ({activity}) => {
   return (
     <tr>
-      <td>{activity.name}</td>
-      <td><ShowDate timestamp={activity.start}/></td>
-      <td><ShowDate timestamp={activity.stop}/></td>
-      <td><ShowDuration
-        start={activity.start}
-        stop={activity.stop}
-      />
+      <td>
+        <ShowDate timestamp={activity.start}/>
       </td>
+      <td>
+        <ShowDate timestamp={activity.stop}/>
+      </td>
+      <td>
+        <ShowDuration
+          start={activity.start}
+          stop={activity.stop}
+        />
+      </td>
+      <td>{activity.name}</td>
     </tr>
   )
 };
@@ -91,10 +103,10 @@ const ActivityTable = ({activities}) => {
     <Table>
       <thead>
       <tr>
-        <th>Name</th>
         <th>Started At</th>
         <th>Completed At</th>
         <th>Duration</th>
+        <th>Name</th>
       </tr>
       </thead>
       <tbody>
