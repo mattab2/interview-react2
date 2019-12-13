@@ -1,26 +1,93 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect, useState} from 'react';
+import './styles/app.scss';
 
-function App() {
+import Header from "./components/global/Header";
+import Wrapper from "./components/global/Wrapper";
+import Activity from "./components/activity/Activity";
+import List from "./components/list/List";
+import {ActivityListGet, ActivityListSet} from "./store";
+
+/**
+ *
+ * @return {[ActivityListGet|*[], (value: (((prevState: (ActivityListGet|*[])) => (ActivityListGet|*[])) | ActivityListGet | *[])) => void]}
+ */
+const useActivityList = () => {
+  const [value, setValue] = useState(
+    ActivityListGet || []
+  );
+
+  useEffect(() => {
+    ActivityListSet(value);
+  }, [value]);
+
+  return [value, setValue];
+};
+
+/**
+ * Only one active activity at a time, and that one is always going to be in at the start of the array.
+ * @param activityList
+ * @return {null|*}
+ */
+const findActive = (activityList) => {
+  if (!activityList || !activityList.length) {
+    return null;
+  }
+
+  if (activityList[0]['stop']) {
+    return null;
+
+  }
+
+  return activityList[0];
+};
+
+const App = () => {
+  const [activityList, setActivityList] = useActivityList();
+
+  const startActivity = (activity) => {
+    setActivityList([
+      activity,
+      ...activityList
+    ]);
+  };
+
+  const stopActivity = (data) => {
+    let activity = findActive(activityList);
+    if (!activity) {
+      return false;
+    }
+
+    activity = {
+      ...activity,
+      ...data,
+    };
+
+    let updatedList = [
+      ...activityList
+    ];
+
+    updatedList[0] = activity;
+
+    setActivityList(updatedList);
+  };
+
+  const active = findActive(activityList);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Header/>
+      <Wrapper>
+        <Activity
+          active={active}
+          startActivity={startActivity}
+          stopActivity={stopActivity}
+        />
+        <List
+          activities={activityList}
+        />
+      </Wrapper>
     </div>
   );
-}
+};
 
 export default App;
